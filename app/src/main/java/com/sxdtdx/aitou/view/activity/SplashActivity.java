@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.sxdtdx.aitou.R;
 import com.sxdtdx.aitou.utils.ThreadUtils;
 
+import cn.bmob.v3.Bmob;
 import su.levenetc.android.textsurface.Text;
 import su.levenetc.android.textsurface.TextBuilder;
 import su.levenetc.android.textsurface.TextSurface;

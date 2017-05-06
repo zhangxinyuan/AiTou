@@ -122,7 +122,7 @@ public class RegisterActivity extends AppCompatActivity implements IRegister, Vi
 
     @Override
     public void registerSuccess() {
-        HelpUtils.showToast(R.string.error_register_success);
+        HelpUtils.showToast(R.string.success_register);
         finish();
     }
 

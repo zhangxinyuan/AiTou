@@ -3,31 +3,23 @@ package com.sxdtdx.aitou;
 import android.app.Application;
 import android.content.Context;
 
+import cn.bmob.v3.Bmob;
+
 /**
  * Created by lenovo on 2017/4/26.
  */
 
 public class MyApplication extends Application {
 
-    private static Context sContext;
-    private static MyApplication instance;
+    private static final String APPLICATION_ID_AI_TOU = "538a4a4bd7a1288078923bd628dac2bd";
 
-    /**
-     * 获取当前的Application
-     *
-     * @return Application
-     */
-    public static MyApplication getInstance() {
-        if (instance == null) {
-            instance = new MyApplication();
-        }
-        return instance;
-    }
+    private static Context sContext;
 
     @Override
     public void onCreate() {
         super.onCreate();
         sContext = this;
+        Bmob.initialize(this, APPLICATION_ID_AI_TOU);
     }
 
     public static Context getContext() {
@@ -36,6 +28,7 @@ public class MyApplication extends Application {
 
     @Override
     public void onTerminate() {
+        sContext = null;
         super.onTerminate();
     }
 

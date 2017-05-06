@@ -15,8 +15,8 @@
     <string name="error_login_error">账号或密码错误</string>
     <string name="error_invalid_pickName">用户名不能为空</string>
     <string name="error_account_error">用户已存在</string>
-    <string name="error_login_success">登陆成功</string>
-    <string name="error_register_success">注册成功</string>
+    <string name="success_login">登陆成功</string>
+    <string name="success_register">注册成功</string>
     <string name="prompt_register_name">昵称</string>
     <string name="prompt_register_phone">手机号码</string>
     <string name="prompt_register_password">输入密码</string>
@@ -31,6 +31,10 @@
     <string name="action_details">详情描述</string>
     <string name="action_add_vote_options">新建投票选项</string>
     <string name="action_publish">发布</string>
+    <string name="error_publish">发布失败</string>
+    <string name="success_publish">发布成功</string>
+    <string name="action_edit_title">请输入主题</string>
+    <string name="action_edit_details">请添加详情描述</string>
 
 
 

@@ -4,6 +4,11 @@ import android.widget.Toast;
 
 import com.sxdtdx.aitou.MyApplication;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
+
 /**
  * Created by lenovo on 2017/4/26.
  */
@@ -23,5 +28,10 @@ public class HelpUtils {
 
     public static boolean isPasswordValid(String password) {
         return password.length() == 8;
+    }
+
+    public static String getCurrentDate() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
+        return sdf.format(new Date());
     }
 }

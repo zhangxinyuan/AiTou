@@ -1,4 +1,4 @@
-package com.sxdtdx.aitou.model.biz.interfaces;
+package com.sxdtdx.aitou.model.interfaces;
 
 /**
  * Created by lenovo on 2017/4/26.
