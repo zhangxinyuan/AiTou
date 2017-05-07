@@ -6,10 +6,10 @@ import java.util.List;
 import cn.bmob.v3.BmobObject;
 
 /**
- * Created by zhangxinyuan on 2017/5/4.
+ * Created by xinyuan on 17-5-7.
  */
 
-public class PublicVote extends BmobObject {
+public class PublicVote extends BmobObject{
     private String userName;
     private String phone;
     private String title;

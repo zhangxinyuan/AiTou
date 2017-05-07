@@ -5,6 +5,7 @@
              tools:context="com.sxdtdx.aitou.view.fragment.VoteListFragment">
 
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/rl_vote_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

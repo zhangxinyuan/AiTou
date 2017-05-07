@@ -48,11 +48,17 @@
                 android:background="@android:drawable/alert_light_frame"
                 android:hint="@string/action_details"/>
 
-            <android.support.v7.widget.RecyclerView
+            <com.sxdtdx.aitou.view.SuperListView
                 android:id="@+id/rl_publish_candidate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_add_options"
+                android:text="@string/action_add_vote_options"/>
 
             <Button
                 android:id="@+id/btn_publish"

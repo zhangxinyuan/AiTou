@@ -7,6 +7,7 @@ package com.sxdtdx.aitou.view.interfaces;
 public interface IPublishVote {
     void initView();
     void addOptions();
+    void refreshOptionList();
     void deleteOption(int index);
     void publishVote();
     void publishSuccess();
