@@ -54,6 +54,12 @@ public class VoteListFragment extends Fragment implements IVoteList{
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        requestData();
+    }
+
+    @Override
     public void requestData() {
         mVoteListPresenter.requestData();
     }
@@ -104,7 +110,7 @@ public class VoteListFragment extends Fragment implements IVoteList{
 
         @Override
         public int getItemCount() {
-            return mPublicVotes.size();
+            return mPublicVotes == null ? 0 : mPublicVotes.size();
         }
 
         public class MyHolder extends RecyclerView.ViewHolder{

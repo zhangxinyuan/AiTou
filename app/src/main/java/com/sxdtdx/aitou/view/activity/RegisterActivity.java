@@ -61,7 +61,7 @@ public class RegisterActivity extends AppCompatActivity implements IRegister, Vi
         mRegisterPassWord.setError(null);
         mRegisterPassWordConfirm.setError(null);
 
-        String pickName = mRegisterPhone.getText().toString();
+        String pickName = mRegisterName.getText().toString();
         String account = mRegisterPhone.getText().toString();
         String password = mRegisterPassWord.getText().toString();
         String passwordConfirm = mRegisterPassWordConfirm.getText().toString();
@@ -86,7 +86,7 @@ public class RegisterActivity extends AppCompatActivity implements IRegister, Vi
             cancel = true;
         }
         if (!HelpUtils.isPasswordValid(password)) {
-            mRegisterPassWord.setError(getString(R.string.error_invalid_password));
+            mRegisterPassWord.setError(getString(R.string.error_password));
             focusView = mRegisterPassWord;
             cancel = true;
         }
