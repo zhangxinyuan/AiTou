@@ -8,7 +8,7 @@ import com.sxdtdx.aitou.view.interfaces.IVoteList;
 import java.util.List;
 
 /**
- * Created by xinyuan on 17-5-7.
+ * Created by zxy on 17-5-7.
  */
 
 public class VoteListPresenter {

@@ -73,4 +73,17 @@ public class PublicVote extends BmobObject{
     public void setTime(String time) {
         this.time = time;
     }
+
+    @Override
+    public String toString() {
+        return "PublicVote{" +
+                "userName='" + userName + '\'' +
+                ", phone='" + phone + '\'' +
+                ", title='" + title + '\'' +
+                ", describe='" + describe + '\'' +
+                ", cover=" + cover +
+                ", options=" + options +
+                ", time='" + time + '\'' +
+                '}';
+    }
 }

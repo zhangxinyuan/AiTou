@@ -1,5 +1,7 @@
 package com.sxdtdx.aitou.model.bizs;
 
+import android.util.Log;
+
 import com.sxdtdx.aitou.model.bean.PublicVote;
 import com.sxdtdx.aitou.model.bean.VoteDetails;
 import com.sxdtdx.aitou.model.interfaces.CallBack;
@@ -50,11 +52,13 @@ public class VoteBiz implements IVoteBiz {
     @Override
     public void getVoteDataList(final CallBack<List<PublicVote>> callBack) {
 
+        Log.e("get", "get vote list");
         BmobQuery<PublicVote> query = new BmobQuery<>();
         query.findObjects(new FindListener<PublicVote>() {
             @Override
             public void done(List<PublicVote> list, BmobException e) {
                 if (e == null) {
+                    Log.e("error: " , e.getMessage());
                     if (callBack != null) {
                         callBack.onFailed(e.getMessage());
                     }
