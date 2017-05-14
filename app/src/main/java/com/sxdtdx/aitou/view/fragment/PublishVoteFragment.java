@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.sxdtdx.aitou.R;
 import com.sxdtdx.aitou.presenter.PublishVotePresenter;

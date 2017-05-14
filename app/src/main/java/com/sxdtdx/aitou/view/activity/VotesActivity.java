@@ -1,8 +1,9 @@
-package com.sxdtdx.aitou.view.fragment;
+package com.sxdtdx.aitou.view.activity;
 
-import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,33 +17,33 @@ import com.sxdtdx.aitou.R;
 import com.sxdtdx.aitou.model.bean.Votes;
 import com.sxdtdx.aitou.model.interfaces.OnItemClickListener;
 import com.sxdtdx.aitou.presenter.VoteListPresenter;
-import com.sxdtdx.aitou.view.activity.VoteDetailsActivity;
 import com.sxdtdx.aitou.view.interfaces.IVoteList;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class VoteListFragment extends Fragment implements IVoteList{
-
+public class VotesActivity extends AppCompatActivity implements IVoteList {
     public static final String EXTRA_VOTE_ID = "vote_id";
-    private View mView;
     private List<Votes> mVotes = new ArrayList<>();
     private VoteListPresenter mVoteListPresenter;
     private VoteListAdapter mVoteListAdapter;
+    private Context context = this;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        mView = inflater.inflate(R.layout.fragment_vote_list, container, false);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.fragment_vote_list);
         initView();
         mVoteListPresenter = new VoteListPresenter(this);
-        return mView;
+        requestData();
     }
 
     @Override
     public void initView() {
-        final RecyclerView mVoteList = (RecyclerView) mView.findViewById(R.id.rl_vote_list);
-        mVoteList.setLayoutManager(new LinearLayoutManager(getActivity()));
+        TextView title = (TextView) findViewById(R.id.title_text);
+        title.setText("我的发布");
+        RecyclerView mVoteList = (RecyclerView) findViewById(R.id.rl_vote_list);
+        mVoteList.setLayoutManager(new LinearLayoutManager(this));
         mVoteListAdapter = new VoteListAdapter();
         mVoteList.setAdapter(mVoteListAdapter);
         mVoteListAdapter.setOnItemClickListener(new OnItemClickListener() {
@@ -54,14 +55,8 @@ public class VoteListFragment extends Fragment implements IVoteList{
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        requestData();
-    }
-
-    @Override
     public void requestData() {
-        mVoteListPresenter.requestPersonalData();
+        mVoteListPresenter.requestData();
     }
 
     @Override
@@ -72,27 +67,26 @@ public class VoteListFragment extends Fragment implements IVoteList{
 
     @Override
     public void turnToDetailsPage(String voteId) {
-        Intent intent = new Intent(getActivity(), VoteDetailsActivity.class);
+        Intent intent = new Intent(VotesActivity.this, VoteDetailsActivity.class);
         intent.putExtra(EXTRA_VOTE_ID, voteId);
         startActivity(intent);
     }
-
 
     private class VoteListAdapter extends RecyclerView.Adapter<VoteListAdapter.MyHolder> {
         private OnItemClickListener onItemClickListener;
 
         @Override
-        public MyHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            MyHolder holder = new MyHolder(LayoutInflater.from(getActivity())
+        public VoteListAdapter.MyHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            VoteListAdapter.MyHolder holder = new VoteListAdapter.MyHolder(LayoutInflater.from(context)
                     .inflate(R.layout.item_fragment_vote_list,parent,false));
             return holder;
         }
 
         @Override
-        public void onBindViewHolder(final MyHolder holder, final int position) {
+        public void onBindViewHolder(final VoteListAdapter.MyHolder holder, final int position) {
 
             Votes vote = mVotes.get(position);
-            Glide.with(getActivity()).load(vote.getCover()).into(holder.mVoteCover);
+            Glide.with(context).load(vote.getCover()).into(holder.mVoteCover);
             holder.mVoteTitle.setText(vote.getTitle());
             holder.mVoteTime.setText(vote.getTime());
 

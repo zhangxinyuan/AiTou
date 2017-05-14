@@ -4,6 +4,7 @@
               android:layout_height="match_parent"
               android:gravity="center_horizontal"
               android:orientation="vertical"
+              android:layout_margin="10dp"
               tools:context="com.sxdtdx.aitou.view.fragment.VoteListFragment">
 
     <ScrollView
@@ -45,7 +46,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:layout_marginTop="16dp"
-                android:background="@android:drawable/alert_light_frame"
+                android:background="@drawable/option_et_bg"
                 android:hint="@string/action_details"/>
 
             <com.sxdtdx.aitou.view.SuperListView
@@ -58,7 +59,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/btn_add_options"
-                android:text="@string/action_add_vote_options"/>
+                android:text="@string/action_add_vote_options"
+                android:background="@null"/>
 
             <Button
                 android:id="@+id/btn_publish"

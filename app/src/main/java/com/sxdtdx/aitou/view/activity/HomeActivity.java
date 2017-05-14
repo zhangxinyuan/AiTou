@@ -3,9 +3,12 @@ package com.sxdtdx.aitou.view.activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.Window;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.sxdtdx.aitou.R;
 import com.sxdtdx.aitou.view.fragment.PersonalFragment;
@@ -24,17 +27,23 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     private VoteListFragment mVoteListFragment;
     private PublishVoteFragment mPublishVoteFragment;
     private PersonalFragment mPersonalFragment;
+    private TextView mTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.hide();
+        }
         initView();
         mFragmentManager = getFragmentManager();
         showDefaultTab();
     }
 
     private void initView() {
+        mTitle = (TextView) findViewById(R.id.title_text);
         mTabBtnVoteList = (LinearLayout) findViewById(R.id.home_btn_vote_list);
         mTabBtnVotePublish = (LinearLayout) findViewById(R.id.home_btn_vote_publish);
         mTabBtnVotePersonal = (LinearLayout) findViewById(R.id.home_btn_vote_personal);
@@ -78,6 +87,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         hideAllFragment(transaction);
         switch (tabSelection) {
             case INDEX_TAB_ZERO:
+                mTitle.setText("投票");
                 mTabBtnVoteList.setBackgroundColor(getResources().getColor(R.color.colorAccent));
                 mTabBtnVoteList.getChildAt(0).setBackgroundResource(R.mipmap.icon_list_focused);
                 if (mVoteListFragment == null) {
@@ -88,6 +98,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
             case INDEX_TAB_ONE:
+                mTitle.setText("发布");
                 mTabBtnVotePublish.setBackgroundColor(getResources().getColor(R.color.colorAccent));
                 mTabBtnVotePublish.getChildAt(0).setBackgroundResource(R.mipmap.icon_publish_focused);
                 if (mPublishVoteFragment == null) {
@@ -98,6 +109,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
             case INDEX_TAB_TWO:
+                mTitle.setText("我的");
                 mTabBtnVotePersonal.setBackgroundColor(getResources().getColor(R.color.colorAccent));
                 mTabBtnVotePersonal.getChildAt(0).setBackgroundResource(R.mipmap.icon_personal_focused);
                 if (mPersonalFragment == null) {

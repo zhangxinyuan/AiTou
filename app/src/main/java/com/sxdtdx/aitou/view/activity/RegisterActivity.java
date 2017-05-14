@@ -1,6 +1,7 @@
 package com.sxdtdx.aitou.view.activity;
 
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.sxdtdx.aitou.R;
 import com.sxdtdx.aitou.presenter.RegisterPresenter;
@@ -28,12 +30,18 @@ public class RegisterActivity extends AppCompatActivity implements IRegister, Vi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.hide();
+        }
         mRegisterPresenter = new RegisterPresenter(this);
         initView();
     }
 
     @Override
     public void initView() {
+        TextView title = (TextView) findViewById(R.id.title_text);
+        title.setText("注册");
         mRegisterName = (EditText) findViewById(R.id.register_name);
         mRegisterPhone = (EditText) findViewById(R.id.register_phone);
         mRegisterPassWord = (EditText) findViewById(R.id.register_password);

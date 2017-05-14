@@ -1,6 +1,6 @@
 package com.sxdtdx.aitou.presenter;
 
-import com.sxdtdx.aitou.model.bean.PublicVote;
+import com.sxdtdx.aitou.model.bean.Votes;
 import com.sxdtdx.aitou.model.bizs.VoteBiz;
 import com.sxdtdx.aitou.model.interfaces.CallBack;
 import com.sxdtdx.aitou.view.interfaces.IVoteDetail;
@@ -19,9 +19,9 @@ public class VoteDetailPresenter {
     }
 
     public void getVoteDetails(String subjectId) {
-        voteBiz.getVoteDetails(subjectId, new CallBack<PublicVote>() {
+        voteBiz.getVoteDetails(subjectId, new CallBack<Votes>() {
             @Override
-            public void onSuccess(PublicVote result) {
+            public void onSuccess(Votes result) {
                 iVoteDetail.initData(result);
             }
 
@@ -36,7 +36,7 @@ public class VoteDetailPresenter {
         voteBiz.doVote(userId, subjectId, optionName, new CallBack<String>() {
             @Override
             public void onSuccess(String result) {
-
+                iVoteDetail.refreshBtn();
             }
 
             @Override

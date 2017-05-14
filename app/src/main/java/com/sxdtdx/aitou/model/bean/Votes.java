@@ -9,7 +9,7 @@ import cn.bmob.v3.BmobObject;
  * Created by xinyuan on 17-5-7.
  */
 
-public class PublicVote extends BmobObject{
+public class Votes extends BmobObject{
     private String userName;
     private String phone;
     private String title;
@@ -76,7 +76,7 @@ public class PublicVote extends BmobObject{
 
     @Override
     public String toString() {
-        return "PublicVote{" +
+        return "Votes{" +
                 "userName='" + userName + '\'' +
                 ", phone='" + phone + '\'' +
                 ", title='" + title + '\'' +

@@ -22,6 +22,7 @@
         android:text="一米阳光"/>
 
     <Button
+        android:id="@+id/btn_personal_votes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -29,6 +30,7 @@
         android:text="@string/action_my_vote"/>
 
     <Button
+        android:id="@+id/btn_personal_publish"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"

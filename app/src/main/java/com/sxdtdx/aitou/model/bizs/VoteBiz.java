@@ -2,7 +2,7 @@ package com.sxdtdx.aitou.model.bizs;
 
 import android.util.Log;
 
-import com.sxdtdx.aitou.model.bean.PublicVote;
+import com.sxdtdx.aitou.model.bean.Votes;
 import com.sxdtdx.aitou.model.bean.VoteDetails;
 import com.sxdtdx.aitou.model.interfaces.CallBack;
 import com.sxdtdx.aitou.model.interfaces.IVoteBiz;
@@ -25,15 +25,15 @@ public class VoteBiz implements IVoteBiz {
     @Override
     public void publicVote(String subject, String content, File cover, List<String> options, String date, String
             userId, String userName, final CallBack<String> callBack) {
-        PublicVote publicVote = new PublicVote();
-        publicVote.setUserName(userName);
-        publicVote.setPhone(userId);
-        publicVote.setTitle(subject);
-        publicVote.setDescribe(content);
-        publicVote.setCover(cover);
-        publicVote.setOptions(options);
-        publicVote.setTime(date);
-        publicVote.save(new SaveListener<String>() {
+        Votes votes = new Votes();
+        votes.setUserName(userName);
+        votes.setPhone(userId);
+        votes.setTitle(subject);
+        votes.setDescribe(content);
+        votes.setCover(cover);
+        votes.setOptions(options);
+        votes.setTime(date);
+        votes.save(new SaveListener<String>() {
             @Override
             public void done(String objectId, BmobException e) {
                 if (e == null) {
@@ -50,21 +50,42 @@ public class VoteBiz implements IVoteBiz {
     }
 
     @Override
-    public void getVoteDataList(final CallBack<List<PublicVote>> callBack) {
+    public void getVoteDataList(final CallBack<List<Votes>> callBack) {
 
-        Log.e("get", "get vote list");
-        BmobQuery<PublicVote> query = new BmobQuery<>();
-        query.findObjects(new FindListener<PublicVote>() {
+        BmobQuery<Votes> query = new BmobQuery<Votes>();
+        query.findObjects(new FindListener<Votes>() {
+           @Override
+           public void done(List<Votes> list, BmobException e) {
+               if (e == null) {
+                   if (callBack != null) {
+                       callBack.onSuccess(list);
+                   }
+               } else {
+                   Log.e("error: " , e.getMessage());
+                   if (callBack != null) {
+                       callBack.onFailed(e.getMessage());
+                   }
+               }
+           }
+       });
+    }
+
+    @Override
+    public void getVoteDataList(String userPhone, final CallBack<List<Votes>> callBack) {
+        BmobQuery<Votes> query = new BmobQuery<Votes>();
+        query.addWhereEqualTo("phone", userPhone);
+        query.setLimit(50);
+        query.findObjects(new FindListener<Votes>() {
             @Override
-            public void done(List<PublicVote> list, BmobException e) {
+            public void done(List<Votes> list, BmobException e) {
                 if (e == null) {
+                    if (callBack != null) {
+                        callBack.onSuccess(list);
+                    }
+                } else {
                     Log.e("error: " , e.getMessage());
                     if (callBack != null) {
                         callBack.onFailed(e.getMessage());
-                    }
-                } else {
-                    if (callBack != null) {
-                        callBack.onSuccess(list);
                     }
                 }
             }
@@ -72,19 +93,14 @@ public class VoteBiz implements IVoteBiz {
     }
 
     @Override
-    public void getVoteDataList(String userId, CallBack<List<PublicVote>> callBack) {
-
-    }
-
-    @Override
-    public void getVoteDetails(String subjectId, final CallBack<PublicVote> callBack) {
-        BmobQuery<PublicVote> query = new BmobQuery<>();
-        query.getObject(subjectId, new QueryListener<PublicVote>() {
+    public void getVoteDetails(String subjectId, final CallBack<Votes> callBack) {
+        BmobQuery<Votes> query = new BmobQuery<>();
+        query.getObject(subjectId, new QueryListener<Votes>() {
             @Override
-            public void done(PublicVote publicVote, BmobException e) {
+            public void done(Votes votes, BmobException e) {
                 if (e == null) {
                     if (callBack != null) {
-                        callBack.onSuccess(publicVote);
+                        callBack.onSuccess(votes);
                     }
 
                 } else {
@@ -100,13 +116,13 @@ public class VoteBiz implements IVoteBiz {
     @Override
     public void doVote(String userId, String subjectId, String optionName, final CallBack<String> callBack) {
         VoteDetails voteDetails = new VoteDetails();
+        voteDetails.setVoteId(subjectId);
         voteDetails.setUserId(userId);
         voteDetails.setOptionName(optionName);
-        voteDetails.setVoteId(subjectId);
         voteDetails.save(new SaveListener<String>() {
             @Override
             public void done(String s, BmobException e) {
-                if (e != null) {
+                if (e == null) {
                     if (callBack != null) {
                         callBack.onSuccess("success");
                     }

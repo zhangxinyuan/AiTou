@@ -1,6 +1,6 @@
 package com.sxdtdx.aitou.view.interfaces;
 
-import com.sxdtdx.aitou.model.bean.PublicVote;
+import com.sxdtdx.aitou.model.bean.Votes;
 
 import java.util.List;
 
@@ -11,6 +11,6 @@ import java.util.List;
 public interface IVoteList {
     void initView();
     void requestData();
-    void refreshLis(List<PublicVote> votes);
+    void refreshLis(List<Votes> votes);
     void turnToDetailsPage(String objectId);
 }
