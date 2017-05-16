@@ -2,11 +2,13 @@ package com.sxdtdx.aitou.view.activity;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -28,6 +30,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     private PublishVoteFragment mPublishVoteFragment;
     private PersonalFragment mPersonalFragment;
     private TextView mTitle;
+    private ImageView mSeeting;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +47,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     private void initView() {
         mTitle = (TextView) findViewById(R.id.title_text);
+        mSeeting = (ImageView) findViewById(R.id.right_btn);
+        mSeeting.setBackgroundResource(R.mipmap.icon_seeting);
         mTabBtnVoteList = (LinearLayout) findViewById(R.id.home_btn_vote_list);
         mTabBtnVotePublish = (LinearLayout) findViewById(R.id.home_btn_vote_publish);
         mTabBtnVotePersonal = (LinearLayout) findViewById(R.id.home_btn_vote_personal);
@@ -51,6 +56,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         mTabBtnVoteList.setOnClickListener(this);
         mTabBtnVotePublish.setOnClickListener(this);
         mTabBtnVotePersonal.setOnClickListener(this);
+        mSeeting.setOnClickListener(this);
     }
 
     private void showDefaultTab() {
@@ -68,6 +74,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.home_btn_vote_personal:
                 setTabSelection(INDEX_TAB_TWO);
+                break;
+            case R.id.right_btn:
+                startActivity(new Intent(this, SettingActivity.class));
                 break;
         }
     }
