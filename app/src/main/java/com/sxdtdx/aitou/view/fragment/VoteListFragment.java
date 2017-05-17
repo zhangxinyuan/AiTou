@@ -61,7 +61,7 @@ public class VoteListFragment extends Fragment implements IVoteList{
 
     @Override
     public void requestData() {
-        mVoteListPresenter.requestPersonalData();
+        mVoteListPresenter.requestData();
     }
 
     @Override

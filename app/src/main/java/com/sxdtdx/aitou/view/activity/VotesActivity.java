@@ -3,6 +3,7 @@ package com.sxdtdx.aitou.view.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -32,7 +33,11 @@ public class VotesActivity extends AppCompatActivity implements IVoteList {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_vote_list);
+        setContentView(R.layout.activity_vote_list);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.hide();
+        }
         initView();
         mVoteListPresenter = new VoteListPresenter(this);
         requestData();
@@ -56,7 +61,7 @@ public class VotesActivity extends AppCompatActivity implements IVoteList {
 
     @Override
     public void requestData() {
-        mVoteListPresenter.requestData();
+        mVoteListPresenter.requestPersonalData();
     }
 
     @Override

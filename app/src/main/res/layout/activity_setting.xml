@@ -5,74 +5,80 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.sxdtdx.aitou.view.activity.SettingActivity"
     android:divider="@drawable/line_bottom"
-    android:showDividers="middle">
+    android:orientation="vertical"
+    android:showDividers="middle"
+    tools:context="com.sxdtdx.aitou.view.activity.SettingActivity">
 
     <include layout="@layout/view_titlebar"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:background="@color/white"
+        android:drawableRight="@mipmap/icon_right"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:text="个人资料"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:textSize="16sp"
-        android:background="@color/white"
-        android:gravity="center_vertical"/>
+        android:textSize="16sp"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:background="@color/white"
+        android:drawableRight="@mipmap/icon_right"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:text="修改密码"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:textSize="16sp"
-        android:background="@color/white"
-        android:gravity="center_vertical"/>
+        android:textSize="16sp"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:background="@color/white"
+        android:drawableRight="@mipmap/icon_right"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:text="绑定帐号"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:textSize="16sp"
-        android:background="@color/white"
-        android:gravity="center_vertical"/>
+        android:textSize="16sp"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:background="@color/white"
+        android:drawableRight="@mipmap/icon_right"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:text="消息提醒"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:textSize="16sp"
-        android:background="@color/white"
-        android:gravity="center_vertical"/>
+        android:textSize="16sp"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:background="@color/white"
+        android:drawableRight="@mipmap/icon_right"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:text="基本设置"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:textSize="16sp"
-        android:background="@color/white"
-        android:gravity="center_vertical"/>
+        android:textSize="16sp"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:text="关于系统"
+        android:background="@color/white"
+        android:drawableRight="@mipmap/icon_right"
+        android:gravity="center_vertical"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:textSize="16sp"
-        android:background="@color/white"
-        android:gravity="center_vertical"/>
+        android:text="关于系统"
+        android:textSize="16sp"/>
     <Button
-        android:layout_marginTop="20dp"
         android:layout_width="150dp"
         android:layout_height="50dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
         android:background="@color/colorAccent"
         android:text="退出登录"
-        android:layout_gravity="center_horizontal"
         android:textColor="@android:color/black"/>
 
 </LinearLayout>
