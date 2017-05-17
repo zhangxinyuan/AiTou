@@ -7,6 +7,7 @@ package com.sxdtdx.aitou.model.bean;
 public class Option {
     private String name;
     private boolean isSelected;
+    private int voteds;
 
     public String getName() {
         return name;
@@ -22,5 +23,13 @@ public class Option {
 
     public void setSelected(boolean selected) {
         isSelected = selected;
+    }
+
+    public int getVoteds() {
+        return voteds;
+    }
+
+    public void setVoteds(int voteds) {
+        this.voteds = voteds;
     }
 }
