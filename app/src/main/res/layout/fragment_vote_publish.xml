@@ -25,6 +25,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:gravity="center"
+                android:layout_marginTop="10dp"
                 android:orientation="vertical">
 
                 <ImageView
@@ -45,8 +46,9 @@
                 android:id="@+id/et_publish_details"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/option_et_bg"
+                android:gravity="left|top"
                 android:hint="@string/action_details"/>
 
             <com.sxdtdx.aitou.view.SuperListView
@@ -67,11 +69,11 @@
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                android:layout_marginBottom="50dp"
                 android:background="@color/colorAccent"
                 android:text="@string/action_publish"/>
         </LinearLayout>
 
     </ScrollView>
-
 
 </LinearLayout>

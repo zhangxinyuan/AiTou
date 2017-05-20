@@ -137,9 +137,9 @@ public class PublishVoteFragment extends Fragment implements IPublishVote, View.
         }
     }
 
-    class OptionsAdapter extends CommonAdapter<String> {
+    private class OptionsAdapter extends CommonAdapter<String> {
 
-        public OptionsAdapter(Context context, List<String> datas) {
+        OptionsAdapter(Context context, List<String> datas) {
             super(context, R.layout.item_create_option, datas);
         }
 

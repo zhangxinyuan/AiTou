@@ -1,32 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:layout_margin="10dp">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/option_et_bg">
 
 
-    <RelativeLayout
+    <TextView
+        android:id="@+id/option_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/option_et_bg">
+        android:padding="8dp"
+        android:textSize="16sp"/>
 
-        <TextView
-            android:id="@+id/option_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:textSize="16sp" />
+    <ImageView
+        android:id="@+id/delete_btn"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="8dp"
+        android:src="@mipmap/icon_close"/>
 
-        <ImageView
-            android:id="@+id/delete_btn"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="8dp"
-            android:src="@mipmap/icon_close" />
-
-    </RelativeLayout>
-
-</LinearLayout>
+</RelativeLayout>
