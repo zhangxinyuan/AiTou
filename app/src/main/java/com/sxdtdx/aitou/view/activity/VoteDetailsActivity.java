@@ -122,9 +122,9 @@ public class VoteDetailsActivity extends AppCompatActivity implements IVoteDetai
                         for (int i = 0; i < list.size(); i++) {
                             if (name.equals(list.get(i).getOptionName())) {
                                 count = count + 1;
-                            }
-                            if (BmobUser.getCurrentUser().getObjectId().equals(list.get(i).getUserId())) {
-                                isSelected = true;
+                                if (BmobUser.getCurrentUser().getObjectId().equals(list.get(i).getUserId())) {
+                                    isSelected = true;
+                                }
                             }
                         }
                         option.setVotedCount(count);
@@ -183,7 +183,6 @@ public class VoteDetailsActivity extends AppCompatActivity implements IVoteDetai
                     } else {
                         VoteOptionNames.remove(option.getName());
                     }
-                    option.setSelected(b);
                 }
             });
         }
