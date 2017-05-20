@@ -10,7 +10,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -32,12 +31,11 @@ import java.util.List;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.CountListener;
 import cn.bmob.v3.listener.FindListener;
 
 import static com.sxdtdx.aitou.view.fragment.VoteListFragment.EXTRA_VOTE_ID;
 
-public class VoteDetailsActivity extends AppCompatActivity implements IVoteDetail{
+public class VoteDetailsActivity extends AppCompatActivity implements IVoteDetail {
 
     private static final String TAG = "VoteDetailsActivity";
     private TextView mVoteTitle;
@@ -48,9 +46,11 @@ public class VoteDetailsActivity extends AppCompatActivity implements IVoteDetai
     private SuperListView mVoteList;
     private Button voteBtn;
     private VoteDetailPresenter mVoteDetailPresenter;
-    private List<Option> mOptions = new ArrayList<>();;
+    private List<Option> mOptions = new ArrayList<>();
     private ColumnAdapter mAdapter;
     private String mVotedId;
+    private String mVoteObjectId;
+    private List<String> VoteOptionNames = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +69,7 @@ public class VoteDetailsActivity extends AppCompatActivity implements IVoteDetai
     @Override
     public void initView() {
         TextView title = (TextView) findViewById(R.id.title_text);
-        title.setText("详情");
+        title.setText(R.string.title_details);
         mVoteTitle = (TextView) findViewById(R.id.tv_vote_details_title);
         mVoteTime = (TextView) findViewById(R.id.tv_vote_details_time);
         mVoteContent = (TextView) findViewById(R.id.tv_vote_details_content);
@@ -80,7 +80,11 @@ public class VoteDetailsActivity extends AppCompatActivity implements IVoteDetai
         voteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                doVote(BmobUser.getCurrentUser().getObjectId(), "","");
+                if (VoteOptionNames.size() > 1) {
+                    HelpUtils.showToast(R.string.toast_chose_limit);
+                    return;
+                }
+                doVote(BmobUser.getCurrentUser().getObjectId(), mVoteObjectId, VoteOptionNames.get(0));
             }
         });
         mAdapter = new ColumnAdapter(this);
@@ -93,66 +97,50 @@ public class VoteDetailsActivity extends AppCompatActivity implements IVoteDetai
     }
 
     @Override
-    public void initData(Votes voteBean) {
+    public void initData(final Votes voteBean) {
+        mVoteObjectId = voteBean.getObjectId();
         mVoteTitle.setText(voteBean.getTitle());
         mVoteTime.setText(voteBean.getTime());
         mVoteContent.setText(voteBean.getDescribe());
         Glide.with(this).load(voteBean.getCover()).into(mVoteCover);
-        for (String name : voteBean.getOptions()) {
-            final Option option = new Option();
-            option.setName(name);
-            BmobQuery<VoteDetails> query1 = new BmobQuery<VoteDetails>();
-            query1.addWhereEqualTo("voteId", mVotedId);
-            BmobQuery<VoteDetails> query2 = new BmobQuery<VoteDetails>();
-            query2.addWhereEqualTo("optionName", name);
 
-            List<BmobQuery<VoteDetails>> queryList = new ArrayList<BmobQuery<VoteDetails>>();
-            queryList.add(query1);
-            queryList.add(query2);
+        final List<String> optionNames = voteBean.getOptions();
 
-            BmobQuery<VoteDetails> query = new BmobQuery<VoteDetails>();
-            query.and(queryList);
-            query.count(VoteDetails.class, new CountListener() {
-                @Override
-                public void done(Integer integer, BmobException e) {
-                    if (e == null) {
-                        Log.d(TAG, "COUNT: " + integer);
-                        option.setVoteds(integer);
-                        mOptions.add(option);
-                        mAdapter.notifyDataSetChanged();
-                    } else {
-                        Log.d(TAG, "BmobException: " + e.getMessage());
-                    }
-                }
-            });
-        }
-
-        BmobQuery<VoteDetails> query1 = new BmobQuery<VoteDetails>();
-        query1.addWhereEqualTo("voteId", mVotedId);
-        BmobQuery<VoteDetails> query2 = new BmobQuery<VoteDetails>();
-        query2.addWhereEqualTo("userId", BmobUser.getCurrentUser().getMobilePhoneNumber());
-
-        List<BmobQuery<VoteDetails>> queryList = new ArrayList<BmobQuery<VoteDetails>>();
-        queryList.add(query1);
-        queryList.add(query2);
-
-        BmobQuery<VoteDetails> query = new BmobQuery<VoteDetails>();
-        query.and(queryList);
+        BmobQuery<VoteDetails> query = new BmobQuery<>();
+        query.addWhereEqualTo("voteId", mVotedId);
         query.findObjects(new FindListener<VoteDetails>() {
             @Override
             public void done(List<VoteDetails> list, BmobException e) {
                 if (e == null) {
-                    if (list == null || list.isEmpty()) {
-                        ThreadUtils.runOnUIThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                voteBtn.setEnabled(false);
-                                voteBtn.setText("已投票");
+                    Log.d(TAG, "list: " + list);
+                    for (String name : optionNames) {
+                        final Option option = new Option();
+                        option.setName(name);
+
+                        int count = 0;
+                        boolean isSelected = false;
+                        for (int i = 0; i < list.size(); i++) {
+                            if (name.equals(list.get(i).getOptionName())) {
+                                count = count + 1;
                             }
-                        });
+                            if (BmobUser.getCurrentUser().getObjectId().equals(list.get(i).getUserId())) {
+                                isSelected = true;
+                            }
+                        }
+                        option.setVotedCount(count);
+                        option.setSelected(isSelected);
+                        mOptions.add(option);
                     }
+                    Log.d(TAG, "options: " + mOptions);
+                    ThreadUtils.runOnUIThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mAdapter.notifyDataSetChanged();
+                            voteBtn.setVisibility(View.VISIBLE);
+                        }
+                    });
                 } else {
-                    Log.d(TAG, "BmobException: " + e.getMessage());
+                    Log.d(TAG, "Exception: " + e.getMessage());
                 }
             }
         });
@@ -166,29 +154,39 @@ public class VoteDetailsActivity extends AppCompatActivity implements IVoteDetai
     @Override
     public void refreshBtn() {
         voteBtn.setEnabled(false);
-        voteBtn.setText("已投票");
-        HelpUtils.showToast("投票成功");
+        voteBtn.setText(R.string.voted);
+        HelpUtils.showToast(R.string.vote_voted);
     }
 
-    class ColumnAdapter extends CommonAdapter<Option> {
+    private class ColumnAdapter extends CommonAdapter<Option> {
 
-        public ColumnAdapter(Context context) {
+        ColumnAdapter(Context context) {
             super(context, R.layout.item_vote_detail_option, mOptions);
         }
 
         @Override
         public void convert(ViewHolder viewHolder, final Option option) {
-            viewHolder.setText(R.id.option_text, option.getName());
+            viewHolder.setText(R.id.option_count, String.valueOf(option.getVotedCount()));
+            viewHolder.setText(R.id.option_name, option.getName());
             CheckBox checkBox = viewHolder.getView(R.id.checkbox_option);
-            checkBox.setSelected(option.isSelected());
+            checkBox.setChecked(option.isSelected());
+            if (option.isSelected()) {
+                voteBtn.setEnabled(false);
+                voteBtn.setText(R.string.voted);
+                checkBox.setClickable(false);
+            }
             checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    if (b) {
+                        VoteOptionNames.add(option.getName());
+                    } else {
+                        VoteOptionNames.remove(option.getName());
+                    }
                     option.setSelected(b);
                 }
             });
         }
-
     }
 
 }

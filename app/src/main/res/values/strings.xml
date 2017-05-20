@@ -38,6 +38,10 @@
     <string name="action_edit_title">请输入主题</string>
     <string name="action_edit_option">请输入选项</string>
     <string name="action_edit_details">请添加详情描述</string>
+    <string name="title_details">详情</string>
+    <string name="toast_chose_limit">只能选择一个哦！</string>
+    <string name="voted">已投票</string>
+    <string name="vote_voted">投票成功</string>
 
 
     <string name="title_activity_splash">SplashActivity</string>

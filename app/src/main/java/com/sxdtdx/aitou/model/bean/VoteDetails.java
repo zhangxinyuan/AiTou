@@ -34,4 +34,13 @@ public class VoteDetails extends BmobObject{
     public void setUserId(String userId) {
         this.userId = userId;
     }
+
+    @Override
+    public String toString() {
+        return "VoteDetails{" +
+                "voteId='" + voteId + '\'' +
+                ", optionName='" + optionName + '\'' +
+                ", userId='" + userId + '\'' +
+                '}';
+    }
 }
