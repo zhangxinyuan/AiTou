@@ -10,6 +10,7 @@ import com.sxdtdx.aitou.R;
 import com.sxdtdx.aitou.utils.ThreadUtils;
 
 import cn.bmob.v3.Bmob;
+import cn.bmob.v3.BmobUser;
 import su.levenetc.android.textsurface.Text;
 import su.levenetc.android.textsurface.TextBuilder;
 import su.levenetc.android.textsurface.TextSurface;
@@ -38,7 +39,12 @@ public class SplashActivity extends AppCompatActivity {
         ThreadUtils.runOnUIThreadDelayed(new Runnable() {
             @Override
             public void run() {
-                startActivity(new Intent(SplashActivity.this, LoginActivity.class));
+                BmobUser bmobUser = BmobUser.getCurrentUser();
+                if(bmobUser != null){
+                    startActivity(new Intent(SplashActivity.this, HomeActivity.class));
+                }else{
+                    startActivity(new Intent(SplashActivity.this, LoginActivity.class));
+                }
                 finish();
             }
         }, 3000);
