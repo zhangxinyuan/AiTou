@@ -53,6 +53,7 @@ public class VoteBiz implements IVoteBiz {
     public void getVoteDataList(final CallBack<List<Votes>> callBack) {
 
         BmobQuery<Votes> query = new BmobQuery<Votes>();
+        query.order("-createdAt");
         query.findObjects(new FindListener<Votes>() {
            @Override
            public void done(List<Votes> list, BmobException e) {
