@@ -8,6 +8,7 @@ import com.sxdtdx.aitou.model.interfaces.CallBack;
 import com.sxdtdx.aitou.model.interfaces.IVoteBiz;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
@@ -38,11 +39,12 @@ public class VoteBiz implements IVoteBiz {
             public void done(String objectId, BmobException e) {
                 if (e == null) {
                     if (callBack != null) {
-                        callBack.onFailed("发布出错");
+                        callBack.onSuccess("发布成功");
                     }
+
                 } else {
                     if (callBack != null) {
-                        callBack.onSuccess("发布成功");
+                        callBack.onFailed("发布出错");
                     }
                 }
             }
@@ -72,10 +74,11 @@ public class VoteBiz implements IVoteBiz {
     }
 
     @Override
-    public void getVoteDataList(String userPhone, final CallBack<List<Votes>> callBack) {
+    public void getPersonalPublishVoteList(String userPhone, final CallBack<List<Votes>> callBack) {
         BmobQuery<Votes> query = new BmobQuery<Votes>();
         query.addWhereEqualTo("phone", userPhone);
-        query.setLimit(50);
+        query.order("-createdAt");
+        query.setLimit(500);
         query.findObjects(new FindListener<Votes>() {
             @Override
             public void done(List<Votes> list, BmobException e) {
@@ -88,6 +91,43 @@ public class VoteBiz implements IVoteBiz {
                     if (callBack != null) {
                         callBack.onFailed(e.getMessage());
                     }
+                }
+            }
+        });
+    }
+
+    @Override
+    public void getPersonalVotedList(String userId, final CallBack<List<Votes>> callBack) {
+        final BmobQuery<VoteDetails> query = new BmobQuery<VoteDetails>();
+        query.addWhereEqualTo("userId", userId);
+        query.setLimit(500);
+        query.findObjects(new FindListener<VoteDetails>() {
+            @Override
+            public void done(List<VoteDetails> list, BmobException e) {
+                if (e == null) {
+                    List<String> voteId = new ArrayList<String>();
+                    for (VoteDetails voteDetail: list) {
+                        voteId.add(voteDetail.getVoteId());
+                    }
+                    BmobQuery<Votes> query2 = new BmobQuery<Votes>();
+                    query2.addWhereContainedIn("objectId", voteId);
+                    query2.order("-createdAt");
+                    query2.setLimit(500);
+                    query2.findObjects(new FindListener<Votes>() {
+                        @Override
+                        public void done(List<Votes> list, BmobException e) {
+                            if (e == null) {
+                                if (callBack != null) {
+                                    callBack.onSuccess(list);
+                                }
+                            } else {
+                                Log.e("error: " , e.getMessage());
+                                if (callBack != null) {
+                                    callBack.onFailed(e.getMessage());
+                                }
+                            }
+                        }
+                    });
                 }
             }
         });

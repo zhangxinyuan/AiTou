@@ -12,8 +12,8 @@ import java.util.List;
 public interface IVoteBiz {
     void publicVote(String subject, String content, File cover, List<String> options, String date, String userId, String userName, CallBack<String> callBack);
     void getVoteDataList( CallBack<List<Votes>> callBack);
-    void getVoteDataList(String userId,  CallBack<List<Votes>> callBack);
+    void getPersonalPublishVoteList(String userId, CallBack<List<Votes>> callBack);
+    void getPersonalVotedList(String userId, CallBack<List<Votes>> callBack);
     void getVoteDetails(String subjectId, CallBack<Votes> callBack);
-
     void doVote(String userId, String subjectId, String optionName, CallBack<String> callBack);
 }

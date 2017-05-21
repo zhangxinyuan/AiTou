@@ -11,13 +11,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.sxdtdx.aitou.R;
 import com.sxdtdx.aitou.presenter.PublishVotePresenter;
 import com.sxdtdx.aitou.utils.HelpUtils;
 import com.sxdtdx.aitou.view.SuperListView;
 import com.sxdtdx.aitou.view.activity.AddOptionsActivity;
+import com.sxdtdx.aitou.view.activity.HomeActivity;
 import com.sxdtdx.aitou.view.interfaces.IPublishVote;
 import com.sxdtdx.aitou.view.utils.CommonAdapter;
 import com.sxdtdx.aitou.view.utils.ViewHolder;
@@ -29,6 +29,7 @@ import java.util.List;
 import cn.bmob.v3.BmobUser;
 
 import static android.app.Activity.RESULT_OK;
+import static com.sxdtdx.aitou.view.activity.HomeActivity.INDEX_TAB_ZERO;
 
 public class PublishVoteFragment extends Fragment implements IPublishVote, View.OnClickListener{
 
@@ -61,7 +62,7 @@ public class PublishVoteFragment extends Fragment implements IPublishVote, View.
         mPublishBtn = (Button) mView.findViewById(R.id.btn_publish);
         mAddBtn = (Button) mView.findViewById(R.id.btn_add_options);
         mOptionsView = (SuperListView) mView.findViewById(R.id.rl_publish_candidate);
-        mOptionsAdapter = new OptionsAdapter(getActivity(), mOptions);
+        mOptionsAdapter = new OptionsAdapter(getActivity());
         mOptionsView.setAdapter(mOptionsAdapter);
         mOptionsView.setFocusable(false);
         mAddBtn.setOnClickListener(this);
@@ -115,11 +116,17 @@ public class PublishVoteFragment extends Fragment implements IPublishVote, View.
     @Override
     public void publishSuccess() {
         HelpUtils.showToast(R.string.success_publish);
+        mPublishTitle.setText("");
+        mPublishDetails.setText("");
+        mOptions.clear();
+        mOptionsAdapter.notifyDataSetChanged();
+        HomeActivity activity = (HomeActivity) getActivity();
+        activity.setTabSelection(INDEX_TAB_ZERO);
     }
 
     @Override
     public void publishFailed() {
-        HelpUtils.showToast(R.string.success_publish);
+        HelpUtils.showToast(R.string.error_publish);
 
     }
 
@@ -139,8 +146,8 @@ public class PublishVoteFragment extends Fragment implements IPublishVote, View.
 
     private class OptionsAdapter extends CommonAdapter<String> {
 
-        OptionsAdapter(Context context, List<String> datas) {
-            super(context, R.layout.item_create_option, datas);
+        OptionsAdapter(Context context) {
+            super(context, R.layout.item_create_option, mOptions);
         }
 
         @Override

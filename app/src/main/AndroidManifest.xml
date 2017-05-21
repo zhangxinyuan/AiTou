@@ -34,7 +34,7 @@
         <activity android:name=".view.activity.SettingActivity" />
         <activity android:name=".view.activity.VoteDetailsActivity" />
         <activity android:name=".view.activity.AddOptionsActivity" />
-        <activity android:name=".view.activity.VotesActivity"></activity>
+        <activity android:name=".view.activity.PersonalVoteActivity"></activity>
     </application>
 
 </manifest>

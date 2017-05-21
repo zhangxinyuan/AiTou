@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.sxdtdx.aitou.MyApplication;
 import com.sxdtdx.aitou.R;
 
 import cn.bmob.v3.BmobUser;
@@ -28,6 +29,7 @@ public class SettingActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 BmobUser.logOut();
+                MyApplication.exit();
             }
         });
     }

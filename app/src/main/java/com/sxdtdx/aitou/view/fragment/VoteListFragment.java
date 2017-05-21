@@ -25,6 +25,7 @@ import java.util.List;
 public class VoteListFragment extends Fragment implements IVoteList{
 
     public static final String EXTRA_VOTE_ID = "vote_id";
+
     private View mView;
     private List<Votes> mVotes = new ArrayList<>();
     private VoteListPresenter mVoteListPresenter;
@@ -36,6 +37,7 @@ public class VoteListFragment extends Fragment implements IVoteList{
         mView = inflater.inflate(R.layout.fragment_vote_list, container, false);
         initView();
         mVoteListPresenter = new VoteListPresenter(this);
+        requestData();
         return mView;
     }
 
@@ -54,9 +56,11 @@ public class VoteListFragment extends Fragment implements IVoteList{
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        requestData();
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden) {
+            requestData();
+        }
     }
 
     @Override
@@ -83,9 +87,8 @@ public class VoteListFragment extends Fragment implements IVoteList{
 
         @Override
         public MyHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            MyHolder holder = new MyHolder(LayoutInflater.from(getActivity())
+            return new MyHolder(LayoutInflater.from(getActivity())
                     .inflate(R.layout.item_fragment_vote_list,parent,false));
-            return holder;
         }
 
         @Override
@@ -112,13 +115,13 @@ public class VoteListFragment extends Fragment implements IVoteList{
             return mVotes == null ? 0 : mVotes.size();
         }
 
-        public class MyHolder extends RecyclerView.ViewHolder{
+        class MyHolder extends RecyclerView.ViewHolder{
 
             private final ImageView mVoteCover;
             private final TextView mVoteTitle;
             private final TextView mVoteTime;
 
-            public MyHolder(View itemRootView) {
+            MyHolder(View itemRootView) {
                 super(itemRootView);
                 mVoteCover = (ImageView) itemRootView.findViewById(R.id.ll_vote_list_cover);
                 mVoteTitle = (TextView) itemRootView.findViewById(R.id.tv_vote_list_title);
@@ -126,7 +129,7 @@ public class VoteListFragment extends Fragment implements IVoteList{
             }
         }
 
-        public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        void setOnItemClickListener(OnItemClickListener onItemClickListener) {
             this.onItemClickListener = onItemClickListener;
         }
     }

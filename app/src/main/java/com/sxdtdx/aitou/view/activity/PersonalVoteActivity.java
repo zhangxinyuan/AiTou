@@ -23,12 +23,17 @@ import com.sxdtdx.aitou.view.interfaces.IVoteList;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VotesActivity extends AppCompatActivity implements IVoteList {
+import static com.sxdtdx.aitou.view.fragment.PersonalFragment.TYPE_LOAD_DATA;
+import static com.sxdtdx.aitou.view.fragment.PersonalFragment.TYPE_PUBLISH;
+import static com.sxdtdx.aitou.view.fragment.PersonalFragment.TYPE_VOTED;
+
+public class PersonalVoteActivity extends AppCompatActivity implements IVoteList {
     public static final String EXTRA_VOTE_ID = "vote_id";
     private List<Votes> mVotes = new ArrayList<>();
     private VoteListPresenter mVoteListPresenter;
     private VoteListAdapter mVoteListAdapter;
     private Context context = this;
+    private String mDataType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +43,7 @@ public class VotesActivity extends AppCompatActivity implements IVoteList {
         if (actionBar != null) {
             actionBar.hide();
         }
+        mDataType = getIntent().getStringExtra(TYPE_LOAD_DATA);
         initView();
         mVoteListPresenter = new VoteListPresenter(this);
         requestData();
@@ -46,7 +52,12 @@ public class VotesActivity extends AppCompatActivity implements IVoteList {
     @Override
     public void initView() {
         TextView title = (TextView) findViewById(R.id.title_text);
-        title.setText("我的发布");
+        if (TYPE_VOTED.equals(mDataType)) {
+            title.setText("我的投票");
+        } else if (TYPE_PUBLISH.equals(mDataType)) {
+            title.setText("我的发布");
+        }
+
         RecyclerView mVoteList = (RecyclerView) findViewById(R.id.rl_vote_list);
         mVoteList.setLayoutManager(new LinearLayoutManager(this));
         mVoteListAdapter = new VoteListAdapter();
@@ -61,7 +72,12 @@ public class VotesActivity extends AppCompatActivity implements IVoteList {
 
     @Override
     public void requestData() {
-        mVoteListPresenter.requestPersonalData();
+        if (TYPE_VOTED.equals(mDataType)) {
+            mVoteListPresenter.requestPersonalVotedData();
+        } else if (TYPE_PUBLISH.equals(mDataType)) {
+            mVoteListPresenter.requestPersonalPublishData();
+        }
+
     }
 
     @Override
@@ -72,7 +88,7 @@ public class VotesActivity extends AppCompatActivity implements IVoteList {
 
     @Override
     public void turnToDetailsPage(String voteId) {
-        Intent intent = new Intent(VotesActivity.this, VoteDetailsActivity.class);
+        Intent intent = new Intent(PersonalVoteActivity.this, VoteDetailsActivity.class);
         intent.putExtra(EXTRA_VOTE_ID, voteId);
         startActivity(intent);
     }

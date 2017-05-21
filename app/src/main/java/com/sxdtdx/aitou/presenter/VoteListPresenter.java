@@ -37,9 +37,24 @@ public class VoteListPresenter {
         });
     }
 
-    public void requestPersonalData() {
+    public void requestPersonalPublishData() {
 
-        mVoteBiz.getVoteDataList(BmobUser.getCurrentUser().getMobilePhoneNumber(), new CallBack<List<Votes>>() {
+        mVoteBiz.getPersonalPublishVoteList(BmobUser.getCurrentUser().getMobilePhoneNumber(), new CallBack<List<Votes>>() {
+            @Override
+            public void onSuccess(List<Votes> result) {
+                iVoteList.refreshLis(result);
+            }
+
+            @Override
+            public void onFailed(String error) {
+
+            }
+        });
+    }
+
+    public void requestPersonalVotedData() {
+
+        mVoteBiz.getPersonalVotedList(BmobUser.getCurrentUser().getObjectId(), new CallBack<List<Votes>>() {
             @Override
             public void onSuccess(List<Votes> result) {
                 iVoteList.refreshLis(result);

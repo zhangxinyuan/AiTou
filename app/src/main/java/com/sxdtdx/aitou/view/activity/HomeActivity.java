@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -19,9 +18,12 @@ import com.sxdtdx.aitou.view.fragment.VoteListFragment;
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private static final int INDEX_TAB_ZERO = 0;
-    private static final int INDEX_TAB_ONE = 1;
-    private static final int INDEX_TAB_TWO = 2;
+    private static final String TAG = "HomeActivity";
+
+    public static final int INDEX_TAB_ZERO = 0;
+    public static final int INDEX_TAB_ONE = 1;
+    public static final int INDEX_TAB_TWO = 2;
+
     private LinearLayout mTabBtnVotePersonal;
     private LinearLayout mTabBtnVotePublish;
     private LinearLayout mTabBtnVoteList;

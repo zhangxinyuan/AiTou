@@ -7,13 +7,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 
 import com.sxdtdx.aitou.R;
-import com.sxdtdx.aitou.view.activity.VotesActivity;
+import com.sxdtdx.aitou.view.activity.PersonalVoteActivity;
 
 public class PersonalFragment extends Fragment {
 
+    public static final String TYPE_LOAD_DATA = "type_load_data";
+    public static final String TYPE_VOTED = "voted";
+    public static final String TYPE_PUBLISH = "publish";
     private Button mVotes;
     private Button mPublish;
 
@@ -26,13 +28,17 @@ public class PersonalFragment extends Fragment {
         mVotes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(getActivity(), PersonalVoteActivity.class);
+                intent.putExtra(TYPE_LOAD_DATA, TYPE_VOTED);
+                startActivity(intent);
             }
         });
         mPublish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getActivity(), VotesActivity.class));
+                Intent intent = new Intent(getActivity(), PersonalVoteActivity.class);
+                intent.putExtra(TYPE_LOAD_DATA, TYPE_PUBLISH);
+                startActivity(intent);
             }
         });
         return view;
