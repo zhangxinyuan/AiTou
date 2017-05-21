@@ -17,6 +17,7 @@ import com.sxdtdx.aitou.R;
 import com.sxdtdx.aitou.model.bean.Option;
 import com.sxdtdx.aitou.model.bean.VoteDetails;
 import com.sxdtdx.aitou.model.bean.Votes;
+import com.sxdtdx.aitou.presenter.ActivityManager;
 import com.sxdtdx.aitou.presenter.VoteDetailPresenter;
 import com.sxdtdx.aitou.utils.HelpUtils;
 import com.sxdtdx.aitou.utils.ThreadUtils;
@@ -60,6 +61,7 @@ public class VoteDetailsActivity extends AppCompatActivity implements IVoteDetai
         if (actionBar != null) {
             actionBar.hide();
         }
+        ActivityManager.addActivity(this);
         initView();
         mVoteDetailPresenter = new VoteDetailPresenter(this);
         mVotedId = getIntent().getStringExtra(EXTRA_VOTE_ID);
@@ -186,6 +188,12 @@ public class VoteDetailsActivity extends AppCompatActivity implements IVoteDetai
                 }
             });
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityManager.removeActivity(this);
     }
 
 }

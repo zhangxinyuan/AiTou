@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide;
 import com.sxdtdx.aitou.R;
 import com.sxdtdx.aitou.model.bean.Votes;
 import com.sxdtdx.aitou.model.interfaces.OnItemClickListener;
+import com.sxdtdx.aitou.presenter.ActivityManager;
 import com.sxdtdx.aitou.presenter.VoteListPresenter;
 import com.sxdtdx.aitou.view.interfaces.IVoteList;
 
@@ -43,6 +44,7 @@ public class PersonalVoteActivity extends AppCompatActivity implements IVoteList
         if (actionBar != null) {
             actionBar.hide();
         }
+        ActivityManager.addActivity(this);
         mDataType = getIntent().getStringExtra(TYPE_LOAD_DATA);
         initView();
         mVoteListPresenter = new VoteListPresenter(this);
@@ -144,5 +146,11 @@ public class PersonalVoteActivity extends AppCompatActivity implements IVoteList
         public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
             this.onItemClickListener = onItemClickListener;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityManager.removeActivity(this);
     }
 }

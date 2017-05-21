@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.sxdtdx.aitou.R;
+import com.sxdtdx.aitou.presenter.ActivityManager;
 import com.sxdtdx.aitou.utils.HelpUtils;
 import com.sxdtdx.aitou.view.interfaces.IAddOption;
 
@@ -26,6 +27,7 @@ public class AddOptionsActivity extends AppCompatActivity implements IAddOption,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_options);
         this.setFinishOnTouchOutside(false);
+        ActivityManager.addActivity(this);
         initView();
     }
 
@@ -77,5 +79,11 @@ public class AddOptionsActivity extends AppCompatActivity implements IAddOption,
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityManager.removeActivity(this);
     }
 }

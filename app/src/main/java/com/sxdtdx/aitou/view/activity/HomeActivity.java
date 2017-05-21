@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.sxdtdx.aitou.R;
+import com.sxdtdx.aitou.presenter.ActivityManager;
 import com.sxdtdx.aitou.view.fragment.PersonalFragment;
 import com.sxdtdx.aitou.view.fragment.PublishVoteFragment;
 import com.sxdtdx.aitou.view.fragment.VoteListFragment;
@@ -42,6 +43,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         if (actionBar != null) {
             actionBar.hide();
         }
+        ActivityManager.addActivity(this);
         initView();
         mFragmentManager = getFragmentManager();
         showDefaultTab();
@@ -144,5 +146,11 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         if (mPersonalFragment != null) {
             transaction.hide(mPersonalFragment);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityManager.removeActivity(this);
     }
 }
