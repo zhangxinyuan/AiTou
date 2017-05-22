@@ -4,8 +4,10 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -13,6 +15,7 @@ import android.widget.TextView;
 
 import com.sxdtdx.aitou.R;
 import com.sxdtdx.aitou.presenter.ActivityManager;
+import com.sxdtdx.aitou.utils.HelpUtils;
 import com.sxdtdx.aitou.view.fragment.PersonalFragment;
 import com.sxdtdx.aitou.view.fragment.PublishVoteFragment;
 import com.sxdtdx.aitou.view.fragment.VoteListFragment;
@@ -24,6 +27,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     public static final int INDEX_TAB_ZERO = 0;
     public static final int INDEX_TAB_ONE = 1;
     public static final int INDEX_TAB_TWO = 2;
+    private static final int DELAY_EXIT = 2000;
 
     private LinearLayout mTabBtnVotePersonal;
     private LinearLayout mTabBtnVotePublish;
@@ -34,6 +38,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     private PersonalFragment mPersonalFragment;
     private TextView mTitle;
     private ImageView mSeeting;
+    private long mShowExitTipTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,4 +158,20 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         super.onDestroy();
         ActivityManager.removeActivity(this);
     }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (SystemClock.uptimeMillis() - mShowExitTipTime > DELAY_EXIT) {
+                HelpUtils.showToast(R.string.toast_exit_tip);
+                mShowExitTipTime = SystemClock.uptimeMillis();
+            } else {
+                finish();
+                System.exit(0);
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
 }

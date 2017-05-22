@@ -42,6 +42,7 @@
     <string name="toast_chose_limit">只能选择一个哦！</string>
     <string name="voted">已投票</string>
     <string name="vote_voted">投票成功</string>
+    <string name="toast_exit_tip">再按一次返回退出</string>
 
 
     <string name="title_activity_splash">SplashActivity</string>
