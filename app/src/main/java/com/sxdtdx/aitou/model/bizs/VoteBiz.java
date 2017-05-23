@@ -12,10 +12,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.listener.UploadFileListener;
 
 /**
  * Created by zhangxinyuan on 2017/5/5.
@@ -24,25 +26,39 @@ import cn.bmob.v3.listener.SaveListener;
 public class VoteBiz implements IVoteBiz {
 
     @Override
-    public void publicVote(String subject, String content, File cover, List<String> options, String date, String
-            userId, String userName, final CallBack<String> callBack) {
-        Votes votes = new Votes();
-        votes.setUserName(userName);
-        votes.setPhone(userId);
-        votes.setTitle(subject);
-        votes.setDescribe(content);
-        votes.setCover(cover);
-        votes.setOptions(options);
-        votes.setTime(date);
-        votes.save(new SaveListener<String>() {
+    public void publicVote(final String subject, final String content, final File cover, final List<String> options, final String date, final String
+            userId, final String userName, final CallBack<String> callBack) {
+        final BmobFile coverFile = new BmobFile(cover);
+        coverFile.uploadblock(new UploadFileListener() {
             @Override
-            public void done(String objectId, BmobException e) {
+            public void done(BmobException e) {
                 if (e == null) {
-                    if (callBack != null) {
-                        callBack.onSuccess("发布成功");
-                    }
+                    String fileUrl = coverFile.getFileUrl();
+                    Votes votes = new Votes();
+                    votes.setUserName(userName);
+                    votes.setPhone(userId);
+                    votes.setTitle(subject);
+                    votes.setDescribe(content);
+                    votes.setCover(fileUrl);
+                    votes.setOptions(options);
+                    votes.setTime(date);
+                    votes.save(new SaveListener<String>() {
+                        @Override
+                        public void done(String objectId, BmobException e) {
+                            if (e == null) {
+                                if (callBack != null) {
+                                    callBack.onSuccess("发布成功");
+                                }
 
+                            } else {
+                                if (callBack != null) {
+                                    callBack.onFailed("发布出错");
+                                }
+                            }
+                        }
+                    });
                 } else {
+                    Log.e("error", e.getMessage());
                     if (callBack != null) {
                         callBack.onFailed("发布出错");
                     }

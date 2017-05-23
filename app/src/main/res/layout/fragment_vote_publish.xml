@@ -2,9 +2,9 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              android:layout_margin="10dp"
               android:gravity="center_horizontal"
               android:orientation="vertical"
-              android:layout_margin="10dp"
               tools:context="com.sxdtdx.aitou.view.fragment.VoteListFragment">
 
     <ScrollView
@@ -21,26 +21,35 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/prompt_theme"/>
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:gravity="center"
+                android:layout_height="130dp"
                 android:layout_marginTop="10dp"
-                android:orientation="vertical">
+                android:background="@drawable/option_et_bg"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/iv_cover"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:scaleType="fitXY"/>
 
                 <ImageView
                     android:id="@+id/iv_publish_cover"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:layout_gravity="center"
+                    android:layout_centerInParent="true"
                     android:background="@mipmap/icon_add_cover"/>
 
                 <TextView
+                    android:id="@+id/tv_add_cover"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
+                    android:layout_below="@id/iv_publish_cover"
+                    android:layout_centerInParent="true"
                     android:text="@string/action_add_theme_cover"/>
-            </LinearLayout>
+            </RelativeLayout>
 
             <EditText
                 android:id="@+id/et_publish_details"
@@ -49,7 +58,8 @@
                 android:layout_marginTop="10dp"
                 android:background="@drawable/option_et_bg"
                 android:gravity="left|top"
-                android:hint="@string/action_details"/>
+                android:hint="@string/action_details"
+                android:padding="5dp"/>
 
             <com.sxdtdx.aitou.view.SuperListView
                 android:id="@+id/rl_publish_candidate"
@@ -58,18 +68,18 @@
                 android:layout_marginTop="16dp"/>
 
             <Button
+                android:id="@+id/btn_add_options"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/btn_add_options"
-                android:text="@string/action_add_vote_options"
-                android:background="@null"/>
+                android:background="@null"
+                android:text="@string/action_add_vote_options"/>
 
             <Button
                 android:id="@+id/btn_publish"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 android:layout_marginBottom="50dp"
+                android:layout_marginTop="16dp"
                 android:background="@color/colorAccent"
                 android:text="@string/action_publish"/>
         </LinearLayout>

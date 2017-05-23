@@ -12,4 +12,5 @@ public interface IPublishVote {
     void publishVote();
     void publishSuccess();
     void publishFailed();
+    void selectPicFromGallery();
 }

@@ -14,7 +14,7 @@ public class Votes extends BmobObject{
     private String phone;
     private String title;
     private String describe;
-    private File cover;
+    private String coverUrl;
     private List<String> options;
     private String time;
 
@@ -50,12 +50,12 @@ public class Votes extends BmobObject{
         this.describe = describe;
     }
 
-    public File getCover() {
-        return cover;
+    public String getCover() {
+        return coverUrl;
     }
 
-    public void setCover(File cover) {
-        this.cover = cover;
+    public void setCover(String coverUrl) {
+        this.coverUrl = coverUrl;
     }
 
     public List<String> getOptions() {
@@ -81,7 +81,7 @@ public class Votes extends BmobObject{
                 ", phone='" + phone + '\'' +
                 ", title='" + title + '\'' +
                 ", describe='" + describe + '\'' +
-                ", cover=" + cover +
+                ", coverUrl=" + coverUrl +
                 ", options=" + options +
                 ", time='" + time + '\'' +
                 '}';

@@ -6,6 +6,7 @@
 
     <color name="black_overlay">#66000000</color>
     <color name="color_btn_normal">#FDF3E7</color>
+    <color name="bg_time">#FDF3E7</color>
 
     <color name="white">#FFFFFF</color>
 </resources>

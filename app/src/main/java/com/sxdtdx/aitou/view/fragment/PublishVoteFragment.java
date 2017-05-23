@@ -3,7 +3,10 @@ package com.sxdtdx.aitou.view.fragment;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +14,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.sxdtdx.aitou.R;
 import com.sxdtdx.aitou.presenter.PublishVotePresenter;
 import com.sxdtdx.aitou.utils.HelpUtils;
@@ -27,13 +33,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.datatype.BmobFile;
 
 import static android.app.Activity.RESULT_OK;
 import static com.sxdtdx.aitou.view.activity.HomeActivity.INDEX_TAB_ZERO;
 
-public class PublishVoteFragment extends Fragment implements IPublishVote, View.OnClickListener{
+public class PublishVoteFragment extends Fragment implements IPublishVote, View.OnClickListener {
 
     private static final int REQUEST_CODE_ADD_OPTION = 1;
+    private static final int SELECT_ORIGINAL_PIC = 0x11;
     private View mView;
     private EditText mPublishTitle;
     private EditText mPublishDetails;
@@ -44,6 +52,9 @@ public class PublishVoteFragment extends Fragment implements IPublishVote, View.
     private SuperListView mOptionsView;
     private OptionsAdapter mOptionsAdapter;
     private Button mAddBtn;
+    private File mCoverFile = null;
+    private TextView mAddCoverTxt;
+    private ImageView mCover;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,6 +69,8 @@ public class PublishVoteFragment extends Fragment implements IPublishVote, View.
     public void initView() {
         mPublishTitle = (EditText) mView.findViewById(R.id.et_publish_theme);
         mPublishCover = (ImageView) mView.findViewById(R.id.iv_publish_cover);
+        mAddCoverTxt = (TextView) mView.findViewById(R.id.tv_add_cover);
+        mCover = (ImageView) mView.findViewById(R.id.iv_cover);
         mPublishDetails = (EditText) mView.findViewById(R.id.et_publish_details);
         mPublishBtn = (Button) mView.findViewById(R.id.btn_publish);
         mAddBtn = (Button) mView.findViewById(R.id.btn_add_options);
@@ -67,6 +80,7 @@ public class PublishVoteFragment extends Fragment implements IPublishVote, View.
         mOptionsView.setFocusable(false);
         mAddBtn.setOnClickListener(this);
         mPublishBtn.setOnClickListener(this);
+        mPublishCover.setOnClickListener(this);
     }
 
     @Override
@@ -88,9 +102,28 @@ public class PublishVoteFragment extends Fragment implements IPublishVote, View.
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == REQUEST_CODE_ADD_OPTION && resultCode == RESULT_OK) {
-            mOptions.add(data.getStringExtra("option"));
-            refreshOptionList();
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case REQUEST_CODE_ADD_OPTION:
+                    mOptions.add(data.getStringExtra("option"));
+                    refreshOptionList();
+                    break;
+                case SELECT_ORIGINAL_PIC:
+                    Uri selectedImage = data.getData();
+                    String[] filePathColumn = { MediaStore.Images.Media.DATA };
+                    Cursor cursor = getActivity().getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+                    if (cursor != null) {
+                        cursor.moveToFirst();
+                        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                        String picturePath = cursor.getString(columnIndex);
+                        cursor.close();
+                        mCoverFile = new File(picturePath);
+                        Glide.with(this).load(mCoverFile).into(mCover);
+                        mPublishCover.setVisibility(View.GONE);
+                        mAddCoverTxt.setVisibility(View.GONE);
+                    }
+                    break;
+            }
         }
     }
 
@@ -104,12 +137,13 @@ public class PublishVoteFragment extends Fragment implements IPublishVote, View.
             HelpUtils.showToast(R.string.action_edit_details);
         } else if (mOptions.isEmpty()) {
             HelpUtils.showToast(R.string.action_edit_option);
+        } else if (mCoverFile == null) {
+            HelpUtils.showToast(R.string.action_add_cover);
         } else {
             BmobUser currentUser = BmobUser.getCurrentUser();
             String userName = currentUser.getUsername();
             String phone = currentUser.getMobilePhoneNumber();
-            File cover = null;
-            mPublishVotePresenter.doPublic(title, content, cover, mOptions, phone, userName);
+            mPublishVotePresenter.doPublic(title, content, mCoverFile, mOptions, phone, userName);
         }
     }
 
@@ -118,6 +152,10 @@ public class PublishVoteFragment extends Fragment implements IPublishVote, View.
         HelpUtils.showToast(R.string.success_publish);
         mPublishTitle.setText("");
         mPublishDetails.setText("");
+        mCover.setImageDrawable(null);
+        mCoverFile = null;
+        mPublishCover.setVisibility(View.VISIBLE);
+        mAddCoverTxt.setVisibility(View.VISIBLE);
         mOptions.clear();
         mOptionsAdapter.notifyDataSetChanged();
         HomeActivity activity = (HomeActivity) getActivity();
@@ -140,8 +178,18 @@ public class PublishVoteFragment extends Fragment implements IPublishVote, View.
                 publishVote();
                 break;
             case R.id.iv_publish_cover:
+                selectPicFromGallery();
                 break;
         }
+    }
+
+
+    @Override
+    public void selectPicFromGallery() {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        startActivityForResult(intent, SELECT_ORIGINAL_PIC);
     }
 
     private class OptionsAdapter extends CommonAdapter<String> {
