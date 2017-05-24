@@ -1,6 +1,7 @@
 package com.sxdtdx.aitou.view.fragment;
 
 import android.app.Fragment;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -14,7 +15,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -33,7 +33,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.bmob.v3.BmobUser;
-import cn.bmob.v3.datatype.BmobFile;
 
 import static android.app.Activity.RESULT_OK;
 import static com.sxdtdx.aitou.view.activity.HomeActivity.INDEX_TAB_ZERO;
@@ -109,14 +108,11 @@ public class PublishVoteFragment extends Fragment implements IPublishVote, View.
                     refreshOptionList();
                     break;
                 case SELECT_ORIGINAL_PIC:
-                    Uri selectedImage = data.getData();
-                    String[] filePathColumn = { MediaStore.Images.Media.DATA };
-                    Cursor cursor = getActivity().getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-                    if (cursor != null) {
-                        cursor.moveToFirst();
-                        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                        String picturePath = cursor.getString(columnIndex);
-                        cursor.close();
+                    if (data == null) {
+                        return;
+                    }
+                    String picturePath = getPicturePath(data);
+                    if (picturePath != null) {
                         mCoverFile = new File(picturePath);
                         Glide.with(this).load(mCoverFile).into(mCover);
                         mPublishCover.setVisibility(View.GONE);
@@ -125,6 +121,57 @@ public class PublishVoteFragment extends Fragment implements IPublishVote, View.
                     break;
             }
         }
+    }
+
+    private String getPicturePath(Intent data) {
+        Uri selectedImageUri = getUri(data);
+        String[] filePathColumn = { MediaStore.Images.Media.DATA };
+        Cursor cursor = getActivity().getContentResolver().query(selectedImageUri, filePathColumn, null, null, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            String picturePath = cursor.getString(columnIndex);
+            cursor.close();
+            return picturePath;
+        }
+        return null;
+    }
+
+    /**
+     * 解决小米手机上获取图片路径为null的情况
+     * @param intent data
+     * @return uri
+     */
+    public Uri getUri(Intent intent) {
+        Uri uri = intent.getData();
+        String type = intent.getType();
+        if (uri.getScheme().equals("file") && (type.contains("image/"))) {
+            String path = uri.getEncodedPath();
+            if (path != null) {
+                path = Uri.decode(path);
+                ContentResolver cr = getActivity().getContentResolver();
+                String buff = "(" + MediaStore.Images.ImageColumns.DATA + "=" + "'" + path + "'" + ")";
+                Cursor cur = cr.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                        new String[] { MediaStore.Images.ImageColumns._ID }, buff, null, null);
+                if (cur == null) {
+                    return null;
+                }
+                int index = 0;
+                for (cur.moveToFirst(); !cur.isAfterLast(); cur.moveToNext()) {
+                    index = cur.getColumnIndex(MediaStore.Images.ImageColumns._ID);
+                    // set _id value
+                    index = cur.getInt(index);
+                }
+                cur.close();
+                if (index != 0) {
+                    Uri uri_temp = Uri.parse("content://media/external/images/media/" + index);
+                    if (uri_temp != null) {
+                        uri = uri_temp;
+                    }
+                }
+            }
+        }
+        return uri;
     }
 
     @Override
