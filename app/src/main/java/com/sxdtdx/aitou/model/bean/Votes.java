@@ -1,6 +1,5 @@
 package com.sxdtdx.aitou.model.bean;
 
-import java.io.File;
 import java.util.List;
 
 import cn.bmob.v3.BmobObject;

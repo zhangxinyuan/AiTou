@@ -2,8 +2,10 @@ package com.sxdtdx.aitou.model.bizs;
 
 import android.util.Log;
 
-import com.sxdtdx.aitou.model.bean.Votes;
+import com.sxdtdx.aitou.model.bean.Option;
 import com.sxdtdx.aitou.model.bean.VoteDetails;
+import com.sxdtdx.aitou.model.bean.VoteInfo;
+import com.sxdtdx.aitou.model.bean.Votes;
 import com.sxdtdx.aitou.model.interfaces.CallBack;
 import com.sxdtdx.aitou.model.interfaces.IVoteBiz;
 
@@ -12,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
@@ -24,6 +27,8 @@ import cn.bmob.v3.listener.UploadFileListener;
  */
 
 public class VoteBiz implements IVoteBiz {
+
+    private static final String TAG = "VoteBiz";
 
     @Override
     public void publicVote(final String subject, final String content, final File cover, final List<String> options, final String date, final String
@@ -150,22 +155,63 @@ public class VoteBiz implements IVoteBiz {
     }
 
     @Override
-    public void getVoteDetails(String subjectId, final CallBack<Votes> callBack) {
+    public void getVoteDetails(final String subjectId, final CallBack<VoteInfo> callBack) {
         BmobQuery<Votes> query = new BmobQuery<>();
         query.getObject(subjectId, new QueryListener<Votes>() {
             @Override
-            public void done(Votes votes, BmobException e) {
+            public void done(final Votes votes, BmobException e) {
                 if (e == null) {
-                    if (callBack != null) {
-                        callBack.onSuccess(votes);
-                    }
-
+                    getVoteCountInfo(votes, subjectId, callBack);
                 } else {
                     if (callBack != null) {
                         callBack.onFailed("出错啦");
                     }
                 }
+            }
+        });
+    }
 
+    private void getVoteCountInfo(final Votes votes, String subjectId, final CallBack<VoteInfo> callBack) {
+        final List<String> optionNames = votes.getOptions();
+        BmobQuery<VoteDetails> query = new BmobQuery<>();
+        query.addWhereEqualTo("voteId", subjectId);
+        query.findObjects(new FindListener<VoteDetails>() {
+            @Override
+            public void done(List<VoteDetails> list, BmobException e) {
+                if (e == null) {
+                    Log.d(TAG, "list: " + list);
+                    List<Option> options = new ArrayList<>();
+                    for (String name : optionNames) {
+                        final Option option = new Option();
+                        option.setName(name);
+
+                        int count = 0;
+                        boolean isSelected = false;
+                        for (int i = 0; i < list.size(); i++) {
+                            if (name.equals(list.get(i).getOptionName())) {
+                                count = count + 1;
+                                if (BmobUser.getCurrentUser().getObjectId().equals(list.get(i).getUserId())) {
+                                    isSelected = true;
+                                }
+                            }
+                        }
+                        option.setVotedCount(count);
+                        option.setSelected(isSelected);
+                        options.add(option);
+                    }
+                    VoteInfo voteInfo = new VoteInfo();
+                    voteInfo.setVoteMsg(votes);
+                    voteInfo.setOptionsMsg(options);
+                    Log.d(TAG, "options: " + options);
+                    if (callBack != null) {
+                        callBack.onSuccess(voteInfo);
+                    }
+                } else {
+                    Log.d(TAG, "Exception: " + e.getMessage());
+                    if (callBack != null) {
+                        callBack.onFailed("出错啦");
+                    }
+                }
             }
         });
     }

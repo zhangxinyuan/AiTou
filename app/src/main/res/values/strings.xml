@@ -41,6 +41,7 @@
     <string name="action_edit_details">请添加详情描述</string>
     <string name="title_details">详情</string>
     <string name="toast_chose_limit">只能选择一个哦！</string>
+    <string name="toast_chose_one">请选择一个选项哦！</string>
     <string name="voted">已投票</string>
     <string name="vote_voted">投票成功</string>
     <string name="toast_exit_tip">再按一次返回退出</string>

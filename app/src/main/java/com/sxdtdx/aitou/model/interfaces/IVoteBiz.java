@@ -1,5 +1,6 @@
 package com.sxdtdx.aitou.model.interfaces;
 
+import com.sxdtdx.aitou.model.bean.VoteInfo;
 import com.sxdtdx.aitou.model.bean.Votes;
 
 import java.io.File;
@@ -14,6 +15,6 @@ public interface IVoteBiz {
     void getVoteDataList( CallBack<List<Votes>> callBack);
     void getPersonalPublishVoteList(String userId, CallBack<List<Votes>> callBack);
     void getPersonalVotedList(String userId, CallBack<List<Votes>> callBack);
-    void getVoteDetails(String subjectId, CallBack<Votes> callBack);
+    void getVoteDetails(String subjectId, CallBack<VoteInfo> callBack);
     void doVote(String userId, String subjectId, String optionName, CallBack<String> callBack);
 }
